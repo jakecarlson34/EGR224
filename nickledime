@@ -1,0 +1,31 @@
+`timescale 1ns / 1ps
+//////////////////////////////////////////////////////////////////////////////////
+// Author: Jake Carlson
+// Scenario: Nickle, Dime 
+//////////////////////////////////////////////////////////////////////////////////
+
+
+module vendingMachine_tb();
+
+vendingMachine f1 (clk, P, C, D, N);
+
+reg clk, D, N;
+wire C, P;
+initial begin
+D = 0;
+N = 0;
+clk = 0;
+end
+
+initial begin 
+#40 N = 1;
+#20 N = 0;
+#40 D = 1;
+#20 D = 0;
+end
+
+always #10 clk = ~clk;
+
+initial #200 $finish;
+
+endmodule
