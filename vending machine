@@ -1,0 +1,53 @@
+`timescale 1ns / 1ps
+//////////////////////////////////////////////////////////////////////////////////
+// Author: Jake Carlson
+// EGR 224 HW 7
+//////////////////////////////////////////////////////////////////////////////////
+
+
+module vendingMachine(clk, R, C, D, N);
+
+input clk, D, N;
+output R, C;
+
+parameter hold = 0, nickle = 1, dime = 2, return = 3, product = 4;
+
+reg C, R;
+reg [2:0]state = 0;
+
+always @(posedge clk) begin
+  case(state)
+     hold: begin
+      C <= 0;
+      R <= 0;
+       if(D == 1) state <= dime;
+       else if(N == 1) state <= nickle;
+       else state <= hold;
+     end
+     
+     nickle: begin
+      if(D == 1) state <= product;
+      else if(N == 1) state <= dime;
+      else state <=  nickle;
+     end
+     
+     dime: begin
+      if(D == 1) state <= return;
+      else if(N == 1) state <= product;
+      else state <= dime;
+     end
+     
+     return: begin
+      state <= product;
+      C <= 1;
+     end
+     
+     product: begin
+      state <= hold;
+      C <= 0;
+      R <= 1;
+     end
+   endcase
+
+end
+endmodule
